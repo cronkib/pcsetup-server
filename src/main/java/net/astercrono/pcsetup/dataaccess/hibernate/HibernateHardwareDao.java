@@ -1,7 +1,8 @@
 package net.astercrono.pcsetup.dataaccess.hibernate;
 
 import java.util.List;
-import java.util.Set;
+
+import javax.persistence.Query;
 
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,21 +23,27 @@ public class HibernateHardwareDao implements HardwareDao {
 	}
 
 	@Override
-	public void addHardwareSetting(HardwareSetting setting) {
-		// TODO Auto-generated method stub
-		
+	public Long addHardwareSetting(HardwareSetting setting) {
+		return (Long) sessionFactory.getCurrentSession().save(setting);
 	}
 
 	@Override
-	public void updateHardwareSettings(Set<HardwareSetting> settings) {
-		// TODO Auto-generated method stub
-		
+	public HardwareSetting updateHardwareSetting(HardwareSetting setting) {
+		return (HardwareSetting) sessionFactory.getCurrentSession().merge(setting);
 	}
 
 	@Override
-	public void removeHardwareSettings(Set<HardwareSetting> settings) {
-		// TODO Auto-generated method stub
+	public void removeHardwareSetting(Long id) {
+		String hql = "delete from HardwareSetting where id = :id";
+
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		query.setParameter("id", id);
 		
+		query.executeUpdate();
 	}
 
+	@Override
+	public HardwareSetting getSetting(Long id) {
+		return sessionFactory.getCurrentSession().find(HardwareSetting.class, id);
+	}
 }

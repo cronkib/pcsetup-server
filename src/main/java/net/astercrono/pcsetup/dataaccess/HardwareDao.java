@@ -1,16 +1,17 @@
 package net.astercrono.pcsetup.dataaccess;
 
 import java.util.List;
-import java.util.Set;
 
 import net.astercrono.pcsetup.domain.HardwareSetting;
 
 public interface HardwareDao {
 	List<HardwareSetting> getSettings();
 	
-	void addHardwareSetting(HardwareSetting setting);
+	Long addHardwareSetting(HardwareSetting setting);
 	
-	void updateHardwareSettings(Set<HardwareSetting> settings);
+	HardwareSetting updateHardwareSetting(HardwareSetting setting);
 	
-	void removeHardwareSettings(Set<HardwareSetting> settings);
+	void removeHardwareSetting(Long id);
+	
+	HardwareSetting getSetting(Long id);
 }
