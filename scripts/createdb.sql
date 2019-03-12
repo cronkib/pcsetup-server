@@ -1,46 +1,73 @@
--- create schema
-create schema if not exists pcsetup authorization pcs;
+-- Schema Setup
+create schema if not exists profile authorization pcs;
+create schema if not exists hardware authorization pcs;
+create schema if not exists game authorization pcs;
 
--- create table: hardware_setting
-create table if not exists pcsetup.hardware_setting (
+-- User
+create table if not exists profile.user (
 	id bigserial primary key,
-	setting varchar(128) not null,
-	value varchar(256) not null,
-	note varchar(512)
+	username varchar(64) not null,
+	fullname varchar(128),
+	bio varchar(256),
+	created_timestamp timestamptz not null default current_timestamp,
+	modified_timestamp timestamptz not null default current_timestamp
 ) without oids;
 
-create index on pcsetup.hardware_setting using btree (setting);
+create unique index on profile.user using btree (username);
 
--- create table: create table game
-create table if not exists pcsetup.game (
+create table if not exists profile.authentication (
 	id bigserial primary key,
+	user_id bigint not null references profile.user(id) on update cascade on delete cascade,
+	ciphertext varchar(256) not null,
+	last_login_timestamp timestamptz not null default current_timestamp,
+	expiration_timestamp timestamptz not null default current_timestamp + interval '365 days'
+) without oids;
+
+create unique index on profile.authentication using btree (user_id);
+
+-- Hardware
+create table if not exists hardware.component (
+	id bigserial primary key,
+	name varchar(512) not null
+) without oids;
+
+create table if not exists hardware.setting (
+	id bigserial primary key,
+	user_id bigint not null references profile.user(id) on update cascade on delete cascade,
+	component_id bigint not null references hardware.component(id) on update cascade on delete cascade,
 	name varchar(256) not null,
-	note varchar(512)
+	notes varchar(512)
 ) without oids;
 
-create index on pcsetup.game using btree (name);
+create index on hardware.setting using btree (user_id, component_id);
+create index on hardware.setting using btree (component_id);
 
--- create table: game_category
-create table if not exists pcsetup.game_category (
+-- Game
+create table if not exists game.title (
 	id bigserial primary key,
-	game_id bigint not null references pcsetup.Game(id) on update cascade on delete cascade,
-	name varchar (256)
+	name varchar(512) not null
 ) without oids;
 
-create index on pcsetup.game_category using btree (game_id, name);
-
-create index on pcsetup.game_category using btree (name);
-
--- create table: game_category_setting
-create table if not exists pcsetup.game_category_setting (
+create table if not exists game.profile_game (
 	id bigserial primary key,
-	game_category_id bigint not null references pcsetup.game_category(id) on update cascade on delete cascade,
+	user_id bigint not null references profile.user(id) on update cascade on delete cascade,
+	title_id bigint not null references game.title(id) on update cascade on delete cascade,
+	average_fps integer 
+) without oids;
+
+create unique index on game.profile_game using btree (user_id, title_id);
+create index on game.profile_game using btree (title_id);
+
+create table if not exists game.category (
+	id bigserial primary key,
+	name varchar(64) not null
+) without oids;
+
+create table if not exists game.setting (
+	id bigserial primary key,
+	category_id bigint not null references game.category(id) on update cascade on delete cascade,
 	setting varchar(128) not null,
-	value varchar(256) not null,
-	note varchar(512)
+	value varchar(128) not null
 ) without oids;
 
-create index on pcsetup.game_category_setting using btree (setting);
-
-create index on pcsetup.game_category_setting using btree (game_category_id, setting);
-
+create unique index on game.setting using btree (category_id, setting);

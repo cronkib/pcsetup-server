@@ -1,15 +1,18 @@
 package net.astercrono.pcsetup.configuration;
 
+import javax.servlet.Filter;
 import javax.sql.DataSource;
 
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBuilder;
+import org.springframework.orm.hibernate5.support.OpenSessionInViewFilter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -38,5 +41,16 @@ public class DatabaseConfiguration {
 	@Primary
 	public PlatformTransactionManager platformTransactionManager(SessionFactory sessionFactory) {
 		return new HibernateTransactionManager(sessionFactory);
+	}
+	
+	@Bean
+	public FilterRegistrationBean<Filter> registerOpenEntityManager() {
+		FilterRegistrationBean<Filter> bean = new FilterRegistrationBean<>();
+
+		OpenSessionInViewFilter filter = new OpenSessionInViewFilter();
+		bean.setFilter(filter);
+		bean.setOrder(5);
+		
+		return bean;
 	}
 }
