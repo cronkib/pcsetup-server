@@ -75,6 +75,14 @@ public class ProfileGame {
 	}
 
 	public void setSettings(List<GameSetting> settings) {
+		for (GameSetting s : settings) {
+			s.setProfileGame(this);
+		}
 		this.settings = settings;
+	}
+	
+	public void addSetting(GameSetting setting) {
+		setting.setProfileGame(this);
+		settings.add(setting);
 	}
 }

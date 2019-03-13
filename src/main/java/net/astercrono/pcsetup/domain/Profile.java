@@ -14,7 +14,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import net.astercrono.pcsetup.domain.game.GameSetting;
 import net.astercrono.pcsetup.domain.game.ProfileGame;
 import net.astercrono.pcsetup.domain.hardware.HardwareSetting;
 
@@ -31,7 +30,7 @@ public class Profile {
 	private String fullname;
 	@Column
 	private String bio;
-	@Column(name = "created_timestamp")
+	@Column(name = "created_timestamp", updatable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createdTimestamp;
 	@Column(name = "modified_timestamp")
@@ -109,11 +108,6 @@ public class Profile {
 	public void setGames(List<ProfileGame> games) {
 		for (ProfileGame g : games) {
 			g.setProfile(this);
-			
-			List<GameSetting> settings = g.getSettings();
-			for (GameSetting s : settings) {
-				s.setProfileGame(g);
-			}
 		}
 		this.games = games;
 	}
@@ -125,12 +119,6 @@ public class Profile {
 	
 	public void addGame(ProfileGame game) {
 		game.setProfile(this);
-		
-		List<GameSetting> settings = game.getSettings();
-		for (GameSetting s : settings) {
-			s.setProfileGame(game);
-		}
-		
 		games.add(game);
 	}
 }
