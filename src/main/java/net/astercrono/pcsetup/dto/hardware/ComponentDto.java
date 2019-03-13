@@ -1,12 +1,12 @@
 package net.astercrono.pcsetup.dto.hardware;
 
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 public class ComponentDto {
 	@NotNull
 	private Long id;
-	@NotEmpty
+	@Size(min = 0, max = 512)
 	private String name;
 
 	public Long getId() {

@@ -15,8 +15,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import net.astercrono.pcsetup.domain.Profile;
 
 @Entity
@@ -28,7 +26,6 @@ public class ProfileGame {
 	private Long id;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id", nullable = false, insertable = true, updatable = false)
-	@JsonIgnore
 	private Profile profile;
 	@OneToOne(optional = false)
 	@JoinColumn(name = "title_id")

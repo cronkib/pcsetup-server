@@ -33,7 +33,7 @@ public class ProfileController {
 	}
 
 	@PostMapping("/profile/create")
-	public PCSResponseModel<Profile> createProfile(@RequestBody ProfileDto profileDto, BindingResult bindingResult)
+	public PCSResponseModel<Profile> createProfile(@Valid @RequestBody ProfileDto profileDto, BindingResult bindingResult)
 			throws ValidationException {
 		BindingResultValidator.validateBindingResult(bindingResult);
 		Profile profile = profileMapper.mapEntityFromDto(profileDto);
@@ -42,16 +42,16 @@ public class ProfileController {
 	}
 
 	@PostMapping("/profile/update")
-	public PCSResponseModel<Profile> updateProfile(@RequestBody ProfileDto profileDto, BindingResult bindingResult)
+	public PCSResponseModel<ProfileDto> updateProfile(@Valid @RequestBody ProfileDto profileDto, BindingResult bindingResult)
 			throws ValidationException {
 		BindingResultValidator.validateBindingResult(bindingResult);
 		Profile profile = profileMapper.mapEntityFromDto(profileDto);
 		Profile updatedProfile = profileService.updateProfile(profile);
-		return new PCSResponseModel<>(updatedProfile);
+		return new PCSResponseModel<>(profileMapper.mapDtoFromEntity(updatedProfile));
 	}
 
 	@PostMapping("/profile/delete")
-	public PCSResponseModel<Profile> deleteProfile(@Valid @RequestBody DeleteProfileRequest profileRequest,
+	public PCSResponseModel<?> deleteProfile(@Valid @RequestBody DeleteProfileRequest profileRequest,
 			BindingResult bindingResult) throws ValidationException {
 		BindingResultValidator.validateBindingResult(bindingResult);
 		profileService.deleteProfile(profileRequest.getId());

@@ -2,14 +2,17 @@ package net.astercrono.pcsetup.dto.game;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 public class GameSettingDto {
 	private Long id;
 	@NotNull
 	private CategoryDto category;
 	@NotEmpty
+	@Size(min = 0, max = 128)
 	private String setting;
 	@NotEmpty
+	@Size(min = 0, max = 128)
 	private String value;
 
 	public Long getId() {

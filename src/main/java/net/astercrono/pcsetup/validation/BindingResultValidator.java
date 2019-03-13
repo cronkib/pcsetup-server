@@ -3,6 +3,7 @@ package net.astercrono.pcsetup.validation;
 import java.util.List;
 
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 
 public class BindingResultValidator {
@@ -15,7 +16,13 @@ public class BindingResultValidator {
 		
 		List<ObjectError> errors = result.getAllErrors();
 		for (ObjectError e : errors) {
-			messages.add(e.getObjectName() + ":" + e.getDefaultMessage());
+			if (e instanceof FieldError) {
+				FieldError fe = (FieldError) e;
+				messages.add(e.getObjectName() + "." + fe.getField() + ":" + e.getDefaultMessage());
+			}
+			else {
+				messages.add(e.getObjectName() + ":" + e.getDefaultMessage());
+			}
 		}
 		
 		throw new ValidationException(messages);

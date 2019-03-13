@@ -11,8 +11,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 @Entity
 @Table(name = "setting", schema = "game")
 public class GameSetting {
@@ -22,7 +20,6 @@ public class GameSetting {
 	private Long id;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "profile_game_id", nullable = false, insertable = true, updatable = false)
-	@JsonIgnore
 	private ProfileGame profileGame;
 	@OneToOne
 	@JoinColumn(name = "category_id")

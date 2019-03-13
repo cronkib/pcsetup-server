@@ -2,11 +2,14 @@ package net.astercrono.pcsetup.dto.hardware;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 public class HardwareSettingDto {
 	private Long id;
 	@NotEmpty
+	@Size(min = 3, max = 256)
 	private String name;
+	@Size(min = 0, max = 512)
 	private String notes;
 	@NotNull
 	private ComponentDto component;
