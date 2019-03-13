@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import net.astercrono.pcsetup.domain.Profile;
 import net.astercrono.pcsetup.dto.ProfileDto;
 import net.astercrono.pcsetup.dto.mapper.ProfileMapper;
+import net.astercrono.pcsetup.model.EmptyPCSResponseModel;
 import net.astercrono.pcsetup.model.PCSResponseModel;
 import net.astercrono.pcsetup.model.request.DeleteProfileRequest;
 import net.astercrono.pcsetup.service.ProfileService;
@@ -33,12 +34,15 @@ public class ProfileController {
 	}
 
 	@PostMapping("/profile/create")
-	public PCSResponseModel<Profile> createProfile(@Valid @RequestBody ProfileDto profileDto, BindingResult bindingResult)
+	public PCSResponseModel<ProfileDto> createProfile(@Valid @RequestBody ProfileDto profileDto, BindingResult bindingResult)
 			throws ValidationException {
 		BindingResultValidator.validateBindingResult(bindingResult);
+
 		Profile profile = profileMapper.mapEntityFromDto(profileDto);
 		profileService.createProfile(profile);
-		return new PCSResponseModel<>(profile);
+		ProfileDto newProfileDto = profileMapper.mapDtoFromEntity(profile);
+		
+		return new PCSResponseModel<>(newProfileDto);
 	}
 
 	@PostMapping("/profile/update")
@@ -51,10 +55,10 @@ public class ProfileController {
 	}
 
 	@PostMapping("/profile/delete")
-	public PCSResponseModel<?> deleteProfile(@Valid @RequestBody DeleteProfileRequest profileRequest,
+	public EmptyPCSResponseModel deleteProfile(@Valid @RequestBody DeleteProfileRequest profileRequest,
 			BindingResult bindingResult) throws ValidationException {
 		BindingResultValidator.validateBindingResult(bindingResult);
 		profileService.deleteProfile(profileRequest.getId());
-		return new PCSResponseModel<>();
+		return new EmptyPCSResponseModel();
 	}
 }

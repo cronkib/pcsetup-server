@@ -72,9 +72,14 @@ public class ProfileGame {
 	}
 
 	public void setSettings(List<GameSetting> settings) {
+		if (settings == null) {
+			return;
+		}
+		
 		for (GameSetting s : settings) {
 			s.setProfileGame(this);
 		}
+
 		this.settings = settings;
 	}
 	

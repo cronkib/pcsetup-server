@@ -95,9 +95,14 @@ public class Profile {
 	}
 
 	public void setHardwareSettings(List<HardwareSetting> hardwareSettings) {
+		if (hardwareSettings == null) {
+			return;
+		}
+		
 		for (HardwareSetting s : hardwareSettings) {
 			s.setProfile(this);
 		}
+		
 		this.hardwareSettings = hardwareSettings;
 	}
 
@@ -106,9 +111,14 @@ public class Profile {
 	}
 
 	public void setGames(List<ProfileGame> games) {
+		if (games == null) {
+			return;
+		}
+		
 		for (ProfileGame g : games) {
 			g.setProfile(this);
 		}
+		
 		this.games = games;
 	}
 	
