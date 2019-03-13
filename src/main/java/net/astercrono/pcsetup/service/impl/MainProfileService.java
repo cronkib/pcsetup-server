@@ -26,7 +26,6 @@ public class MainProfileService implements ProfileService {
 
 	@Override
 	public Profile updateProfile(Profile profile) {
-		profile.getHardwareSettings().forEach((setting) -> setting.setProfile(profile));
 		return profileDao.updateProfile(profile);
 	}
 

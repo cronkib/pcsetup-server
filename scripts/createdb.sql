@@ -71,4 +71,4 @@ create table if not exists game.setting (
 	value varchar(128) not null
 ) without oids;
 
-create unique index on game.setting using btree (profile_game_id, category_id);
+create index on game.setting using btree (profile_game_id, category_id);

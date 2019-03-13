@@ -14,6 +14,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import net.astercrono.pcsetup.domain.game.GameSetting;
+import net.astercrono.pcsetup.domain.game.ProfileGame;
 import net.astercrono.pcsetup.domain.hardware.HardwareSetting;
 
 @Entity
@@ -38,6 +40,8 @@ public class Profile {
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "profile", orphanRemoval = true)
 	private List<HardwareSetting> hardwareSettings;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "profile", orphanRemoval = true)
+	private List<ProfileGame> games;
 
 	public Long getId() {
 		return id;
@@ -92,6 +96,41 @@ public class Profile {
 	}
 
 	public void setHardwareSettings(List<HardwareSetting> hardwareSettings) {
+		for (HardwareSetting s : hardwareSettings) {
+			s.setProfile(this);
+		}
 		this.hardwareSettings = hardwareSettings;
+	}
+
+	public List<ProfileGame> getGames() {
+		return games;
+	}
+
+	public void setGames(List<ProfileGame> games) {
+		for (ProfileGame g : games) {
+			g.setProfile(this);
+			
+			List<GameSetting> settings = g.getSettings();
+			for (GameSetting s : settings) {
+				s.setProfileGame(g);
+			}
+		}
+		this.games = games;
+	}
+	
+	public void addHardwareSetting(HardwareSetting setting) {
+		setting.setProfile(this);
+		hardwareSettings.add(setting);
+	}
+	
+	public void addGame(ProfileGame game) {
+		game.setProfile(this);
+		
+		List<GameSetting> settings = game.getSettings();
+		for (GameSetting s : settings) {
+			s.setProfileGame(game);
+		}
+		
+		games.add(game);
 	}
 }
