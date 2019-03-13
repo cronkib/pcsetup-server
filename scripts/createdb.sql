@@ -65,9 +65,10 @@ create table if not exists game.category (
 
 create table if not exists game.setting (
 	id bigserial primary key,
+	profile_game_id bigint not null references game.profile_game(id) on update cascade on delete cascade,
 	category_id bigint not null references game.category(id) on update cascade on delete cascade,
 	setting varchar(128) not null,
 	value varchar(128) not null
 ) without oids;
 
-create unique index on game.setting using btree (category_id, setting);
+create unique index on game.setting using btree (profile_game_id, category_id);

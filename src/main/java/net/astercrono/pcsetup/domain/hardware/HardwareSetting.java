@@ -2,13 +2,18 @@ package net.astercrono.pcsetup.domain.hardware;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import net.astercrono.pcsetup.domain.Profile;
 
 @Entity
 @Table(name = "setting", schema = "hardware")
@@ -21,11 +26,12 @@ public class HardwareSetting {
 	private String name;
 	@Column
 	private String notes;
-	@Column(name = "user_id")
-	@NotNull
-	private Long userId;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id", nullable = false, insertable = true, updatable = false)
+	@JsonIgnore
+	private Profile profile;
 
-	@OneToOne
+	@OneToOne(optional = false)
 	@JoinColumn(name = "component_id")
 	private Component component;
 
@@ -52,13 +58,13 @@ public class HardwareSetting {
 	public void setNotes(String notes) {
 		this.notes = notes;
 	}
-
-	public Long getUserId() {
-		return userId;
+	
+	public Profile getProfile() {
+		return profile;
 	}
 
-	public void setUserId(Long userId) {
-		this.userId = userId;
+	public void setProfile(Profile profile) {
+		this.profile = profile;
 	}
 
 	public Component getComponent() {

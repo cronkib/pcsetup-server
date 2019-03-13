@@ -9,7 +9,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -37,8 +36,7 @@ public class Profile {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date modifiedTimestamp;
 
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "user_id")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "profile", orphanRemoval = true)
 	private List<HardwareSetting> hardwareSettings;
 
 	public Long getId() {
