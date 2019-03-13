@@ -9,5 +9,5 @@ public interface ProfileDao {
 	
 	Profile updateProfile(Profile profile);
 	
-	void deleteProfile(Profile profile);
+	void deleteProfile(Long id);
 }

@@ -10,7 +10,8 @@ create table if not exists profile.user (
 	fullname varchar(128),
 	bio varchar(256),
 	created_timestamp timestamptz not null default current_timestamp,
-	modified_timestamp timestamptz not null default current_timestamp
+	modified_timestamp timestamptz not null default current_timestamp,
+	deleted boolean not null default false
 ) without oids;
 
 create unique index on profile.user using btree (username);

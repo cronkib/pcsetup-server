@@ -30,7 +30,7 @@ public class MainProfileService implements ProfileService {
 	}
 
 	@Override
-	public void deleteProfile(Profile profile) {
-		profileDao.deleteProfile(profile);
+	public void deleteProfile(Long id) {
+		profileDao.deleteProfile(id);
 	}
 }
