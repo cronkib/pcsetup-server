@@ -6,6 +6,7 @@ import javax.validation.constraints.Size;
 public class CategoryDto {
 	@NotNull
 	private Long id;
+	@NotNull
 	@Size(min = 0, max = 64)
 	private String name;
 

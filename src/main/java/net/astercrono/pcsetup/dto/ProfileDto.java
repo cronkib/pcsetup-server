@@ -2,22 +2,27 @@ package net.astercrono.pcsetup.dto;
 
 import java.util.List;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import net.astercrono.pcsetup.annotation.ValidEmail;
 import net.astercrono.pcsetup.dto.game.ProfileGameDto;
 import net.astercrono.pcsetup.dto.hardware.HardwareSettingDto;
 
 public class ProfileDto {
 	private Long id;
-	@NotEmpty
+	@NotNull
 	@Size(min = 8, max = 64)
 	private String username;
-	@NotEmpty()
+	@NotNull
 	@Size(min = 2, max = 128)
 	private String fullname;
 	@Size(min = 0, max = 256)
 	private String bio;
+	@NotNull
+	@Size(min = 16, max = 256)
+	@ValidEmail
+	private String email;
 	private List<HardwareSettingDto> hardwareSettings;
 	private List<ProfileGameDto> games;
 

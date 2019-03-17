@@ -2,6 +2,7 @@ package net.astercrono.pcsetup.dataaccess.hibernate;
 
 import java.util.Date;
 
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 import org.hibernate.SessionFactory;
@@ -40,5 +41,20 @@ public class HibernateProfileDao implements ProfileDao {
 		Query query = sessionFactory.getCurrentSession().createQuery(hql);
 		query.setParameter("id", id);
 		query.executeUpdate();
+	}
+
+	@Override
+	public boolean profileExists(String username) {
+		String hql = "select 1 from Profile where username = :username";
+
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		query.setParameter("username", username);
+
+		try {
+			query.getSingleResult();
+			return true;
+		} catch (NoResultException ex) {
+			return false;
+		}
 	}
 }

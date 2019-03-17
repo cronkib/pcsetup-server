@@ -15,6 +15,7 @@ import net.astercrono.pcsetup.dto.ProfileDto;
 import net.astercrono.pcsetup.dto.mapper.ProfileMapper;
 import net.astercrono.pcsetup.model.EmptyPCSResponseModel;
 import net.astercrono.pcsetup.model.PCSResponseModel;
+import net.astercrono.pcsetup.model.request.CreateProfileRequest;
 import net.astercrono.pcsetup.model.request.DeleteProfileRequest;
 import net.astercrono.pcsetup.service.ProfileService;
 import net.astercrono.pcsetup.validation.BindingResultValidator;
@@ -34,12 +35,12 @@ public class ProfileController {
 	}
 
 	@PostMapping("/profile/create")
-	public PCSResponseModel<ProfileDto> createProfile(@Valid @RequestBody ProfileDto profileDto, BindingResult bindingResult)
+	public PCSResponseModel<ProfileDto> createProfile(@Valid @RequestBody CreateProfileRequest createProfileRequest, BindingResult bindingResult)
 			throws ValidationException {
 		BindingResultValidator.validateBindingResult(bindingResult);
 
-		Profile profile = profileMapper.mapEntityFromDto(profileDto);
-		profileService.createProfile(profile);
+		Profile profile = createProfileRequest.mapToProfile();
+		profileService.createProfile(profile, createProfileRequest.getPassword());
 		ProfileDto newProfileDto = profileMapper.mapDtoFromEntity(profile);
 		
 		return new PCSResponseModel<>(newProfileDto);
@@ -49,8 +50,10 @@ public class ProfileController {
 	public PCSResponseModel<ProfileDto> updateProfile(@Valid @RequestBody ProfileDto profileDto, BindingResult bindingResult)
 			throws ValidationException {
 		BindingResultValidator.validateBindingResult(bindingResult);
+		
 		Profile profile = profileMapper.mapEntityFromDto(profileDto);
 		Profile updatedProfile = profileService.updateProfile(profile);
+
 		return new PCSResponseModel<>(profileMapper.mapDtoFromEntity(updatedProfile));
 	}
 
@@ -58,7 +61,9 @@ public class ProfileController {
 	public EmptyPCSResponseModel deleteProfile(@Valid @RequestBody DeleteProfileRequest profileRequest,
 			BindingResult bindingResult) throws ValidationException {
 		BindingResultValidator.validateBindingResult(bindingResult);
+
 		profileService.deleteProfile(profileRequest.getId());
+
 		return new EmptyPCSResponseModel();
 	}
 }

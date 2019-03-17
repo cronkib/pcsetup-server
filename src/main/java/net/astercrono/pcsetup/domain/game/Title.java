@@ -14,6 +14,7 @@ public class Title {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column
 	private Long id;
+	
 	@Column
 	private String name;
 

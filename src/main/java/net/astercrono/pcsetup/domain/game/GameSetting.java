@@ -18,12 +18,15 @@ public class GameSetting {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column
 	private Long id;
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "profile_game_id", nullable = false, insertable = true, updatable = false)
 	private ProfileGame profileGame;
+	
 	@OneToOne
 	@JoinColumn(name = "category_id")
 	private Category category;
+	
 	@Column
 	private String setting;
 	@Column

@@ -10,4 +10,6 @@ public interface ProfileDao {
 	Profile updateProfile(Profile profile);
 	
 	void deleteProfile(Long id);
+	
+	boolean profileExists(String username);
 }

@@ -20,10 +20,13 @@ public class HardwareSetting {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column
 	private Long id;
+	
 	@Column
 	private String name;
+	
 	@Column
 	private String notes;
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id", nullable = false, insertable = true, updatable = false)
 	private Profile profile;

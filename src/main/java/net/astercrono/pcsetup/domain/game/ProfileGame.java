@@ -24,14 +24,18 @@ public class ProfileGame {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column
 	private Long id;
+	
+	@Column(name = "average_fps")
+	private Integer averageFps;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id", nullable = false, insertable = true, updatable = false)
 	private Profile profile;
+	
 	@OneToOne(optional = false)
 	@JoinColumn(name = "title_id")
 	private Title title;
-	@Column(name = "average_fps")
-	private Integer averageFps;
+
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "profileGame", orphanRemoval = true)
 	private List<GameSetting> settings;
 	

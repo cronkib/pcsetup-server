@@ -10,12 +10,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import net.astercrono.pcsetup.domain.game.ProfileGame;
 import net.astercrono.pcsetup.domain.hardware.HardwareSetting;
+import net.astercrono.pcsetup.domain.profile.UserAuthentication;
 
 @Entity
 @Table(name = "user", schema = "profile")
@@ -24,23 +26,35 @@ public class Profile {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column
 	private Long id;
+	
 	@Column
 	private String username;
+
 	@Column
 	private String fullname;
+
 	@Column
 	private String bio;
+
 	@Column(name = "created_timestamp", updatable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createdTimestamp;
+
 	@Column(name = "modified_timestamp")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date modifiedTimestamp;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "profile", orphanRemoval = true)
 	private List<HardwareSetting> hardwareSettings;
+	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "profile", orphanRemoval = true)
 	private List<ProfileGame> games;
+	
+	@OneToOne(cascade = CascadeType.ALL, mappedBy = "profile", orphanRemoval = true)
+	private UserAuthentication authentication;
+	
+	@Column
+	private String email;
 
 	public Long getId() {
 		return id;
@@ -130,5 +144,25 @@ public class Profile {
 	public void addGame(ProfileGame game) {
 		game.setProfile(this);
 		games.add(game);
+	}
+
+	public UserAuthentication getAuthentication() {
+		return authentication;
+	}
+
+	public void setAuthentication(UserAuthentication authentication) {
+		if (authentication == null) {
+			return;
+		}
+		authentication.setProfile(this);
+		this.authentication = authentication;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 }
