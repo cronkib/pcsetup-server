@@ -8,6 +8,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import net.astercrono.pcsetup.model.auth.AuthProperties;
+import net.astercrono.pcsetup.model.auth.JwtKey;
+import net.astercrono.pcsetup.model.auth.Pepper;
 
 @Configuration
 public class AuthConfiguration {
@@ -20,9 +22,13 @@ public class AuthConfiguration {
 		FileInputStream is = new FileInputStream(authPropertiesPathname);
 		props.load(is);
 		
-		String key = props.getProperty("pepper.key");
-		String iv = props.getProperty("pepper.iv");
+		String pepperKey = props.getProperty("pepper.key");
+		String pepperIv = props.getProperty("pepper.iv");
+		Pepper pepper = new Pepper(pepperKey, pepperIv);
 		
-		return new AuthProperties(key, iv);
+		String jwtSecret = props.getProperty("jwt.key");
+		JwtKey jwt = new JwtKey(jwtSecret);
+		
+		return new AuthProperties(pepper, jwt);
 	}
 }

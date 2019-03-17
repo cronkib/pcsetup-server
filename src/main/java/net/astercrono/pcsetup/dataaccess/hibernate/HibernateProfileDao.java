@@ -26,12 +26,18 @@ public class HibernateProfileDao implements ProfileDao {
 	public void createProfile(Profile profile) {
 		profile.setCreatedTimestamp(new Date());
 		profile.setModifiedTimestamp(new Date());
+		profile.setDeleted(false);
 		sessionFactory.getCurrentSession().persist(profile);
 	}
 
 	@Override
 	public Profile updateProfile(Profile profile) {
 		profile.setModifiedTimestamp(new Date());
+		
+		if (profile.getDeleted() == null) {
+			profile.setDeleted(false);
+		}
+		
 		return (Profile) sessionFactory.getCurrentSession().merge(profile);
 	}
 

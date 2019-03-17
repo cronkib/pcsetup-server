@@ -71,4 +71,14 @@ public class UserAuthentication {
 	public void setProfile(Profile profile) {
 		this.profile = profile;
 	}
+	
+	public boolean isActive() {
+		return !isExpired() && !profile.getDeleted();
+	}
+	
+	public boolean isExpired() {
+		Long currentTimeMs = new Date().getTime();
+		Long expiredMs = expirationTimestamp.getTime();
+		return expiredMs <= currentTimeMs;
+	}
 }

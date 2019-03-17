@@ -1,5 +1,6 @@
 package net.astercrono.pcsetup.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import net.astercrono.pcsetup.dto.ProfileDto;
 import net.astercrono.pcsetup.dto.mapper.ProfileMapper;
 import net.astercrono.pcsetup.model.EmptyPCSResponseModel;
 import net.astercrono.pcsetup.model.PCSResponseModel;
+import net.astercrono.pcsetup.model.auth.AuthenticatedSession;
 import net.astercrono.pcsetup.model.request.CreateProfileRequest;
 import net.astercrono.pcsetup.model.request.DeleteProfileRequest;
 import net.astercrono.pcsetup.service.ProfileService;
@@ -27,9 +29,16 @@ public class ProfileController {
 	private ProfileMapper profileMapper;
 	@Autowired
 	private ProfileService profileService;
+	
+	@GetMapping("/profile")
+	public PCSResponseModel<ProfileDto> getSessionProfile(HttpServletRequest request) {
+		AuthenticatedSession session = AuthenticatedSession.getSession(request);
+		Profile profile = profileService.getProfile(session.getUserId());
+		return new PCSResponseModel<>(profileMapper.mapDtoFromEntity(profile));
+	}
 
 	@GetMapping("/profile/{id}")
-	public PCSResponseModel<ProfileDto> getProfile(@PathVariable Long id) {
+	public PCSResponseModel<ProfileDto> getProfileById(@PathVariable Long id) {
 		Profile profile = profileService.getProfile(id);
 		return new PCSResponseModel<>(profileMapper.mapDtoFromEntity(profile));
 	}

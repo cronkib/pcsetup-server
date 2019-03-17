@@ -55,6 +55,13 @@ public class Profile {
 	
 	@Column
 	private String email;
+	
+	@Column
+	private Boolean deleted;
+	
+	public Profile() {
+		deleted = false;
+	}
 
 	public Long getId() {
 		return id;
@@ -164,5 +171,13 @@ public class Profile {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public Boolean getDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(Boolean deleted) {
+		this.deleted = deleted;
 	}
 }
