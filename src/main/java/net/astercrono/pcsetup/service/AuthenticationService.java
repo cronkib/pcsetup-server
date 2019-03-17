@@ -7,4 +7,6 @@ import net.astercrono.pcsetup.validation.ValidationException;
 
 public interface AuthenticationService {
 	Optional<AuthenticationTokens> login(String username, String password) throws ValidationException;
+
+	Optional<AuthenticationTokens> refreshAccess(String refreshToken) throws ValidationException;
 }

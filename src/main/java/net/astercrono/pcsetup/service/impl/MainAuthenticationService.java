@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import net.astercrono.pcsetup.dataaccess.AuthenticationDao;
+import net.astercrono.pcsetup.domain.Profile;
 import net.astercrono.pcsetup.domain.profile.UserAuthentication;
 import net.astercrono.pcsetup.exception.authentication.InvalidPasswordException;
 import net.astercrono.pcsetup.model.auth.AuthenticationTokens;
@@ -42,5 +43,27 @@ public class MainAuthenticationService implements AuthenticationService {
 		} catch (InvalidPasswordException ex) {
 			throw new ValidationException(new ValidationMessages("Invalid password"));
 		} 
+	}
+	
+	@Override
+	public Optional<AuthenticationTokens> refreshAccess(String refreshToken) throws ValidationException {
+		Optional<Long> userId = cryptUtil.verifyToken(refreshToken);
+		
+		if (userId.isEmpty()) {
+			return Optional.empty();
+		}
+		
+		Optional<UserAuthentication> auth = authDao.getUserAuthentication(userId.get());
+		
+		if (auth.isEmpty()) {
+			throw new ValidationException(new ValidationMessages("User does not exist."));
+		}
+		
+		Profile profile = auth.get().getProfile();
+		
+		String newAccessToken = cryptUtil.createAccessToken(profile.getId(), profile.getUsername());
+		String newRefreshToken = cryptUtil.createRefreshToken(profile.getId(), profile.getUsername());
+		
+		return Optional.of(new AuthenticationTokens(newAccessToken, newRefreshToken));
 	}
 }

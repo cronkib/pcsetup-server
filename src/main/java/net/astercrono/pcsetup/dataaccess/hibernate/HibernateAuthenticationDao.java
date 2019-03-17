@@ -38,6 +38,28 @@ public class HibernateAuthenticationDao implements AuthenticationDao {
 			return Optional.empty();
 		}
 	}
+	
+	@Override
+	public Optional<UserAuthentication> getUserAuthentication(Long userId) {
+		StringBuilder hql = new StringBuilder();
+		hql.append("from UserAuthentication ");
+		hql.append("where profile.id = :userId ");
+
+		Query query = sessionFactory.getCurrentSession().createQuery(hql.toString());
+		query.setParameter("userId", userId);
+
+		try {
+			UserAuthentication auth = (UserAuthentication) query.getSingleResult();
+			
+			if (auth.isActive()) {
+				return Optional.of(auth);
+			}
+
+			return Optional.empty();
+		} catch (NoResultException ex) {
+			return Optional.empty();
+		}
+	}
 
 	@Override
 	public UserAuthentication updateUserAuthentication(UserAuthentication authentication) {
